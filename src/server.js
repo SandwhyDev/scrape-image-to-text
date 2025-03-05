@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import LoadEnv from "./libs/LoadEnv";
 import UploadControllers from "./controllers/UploadControllers";
+import ScraperControllers from "./controllers/ScraperControllers";
 
 LoadEnv();
 
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 //ROUTES
 app.use("/api", UploadControllers);
+app.use("/api", ScraperControllers);
 
 //LISTENER
 app.listen(PORT, "0.0.0.0", () => {
