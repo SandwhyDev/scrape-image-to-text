@@ -18,8 +18,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
     "express": "^4.21.2",
     "multer": "^1.4.5-lts.1",
+    "puppeteer": "^21.6.1",
     "scraperjs": "^1.2.0",
     "tesseract.js": "^6.0.0"
   },
