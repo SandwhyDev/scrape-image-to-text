@@ -1,9 +1,8 @@
 import express from "express";
 import puppeteer from "puppeteer";
-// import Scraper from "scraperjs";
 import ExcelJS from "exceljs";
 import path from "path";
-import fs from "fs";
+import { rgbToHex } from "../libs/rgbToHex";
 
 const ScraperControllers = express.Router();
 
@@ -39,11 +38,23 @@ ScraperControllers.post(`/scrape-create`, async (req, res) => {
 
     // **Simpan ke Excel**
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Scraped Data");
+    const date = new Date();
+    const formattedDate = date
+      .toLocaleString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+      .replace(/[/:]/g, "-"); // Ganti karakter yang tidak bisa digunakan di nama sheet
+
+    const worksheet = workbook.addWorksheet(formattedDate);
 
     // Header dengan Timeframe
     worksheet.columns = [
-      { header: "Symbol", key: "symbol", width: 15 },
+      { header: "Country", key: "country", width: 15 },
       { header: "15m", key: "time_15m", width: 15 },
       { header: "1h", key: "time_1h", width: 15 },
       { header: "4h", key: "time_4h", width: 15 },
@@ -53,21 +64,10 @@ ScraperControllers.post(`/scrape-create`, async (req, res) => {
       { header: "1y", key: "time_1y", width: 15 },
     ];
 
-    // Fungsi untuk mengonversi rgb(r, g, b) ke format heksadesimal #RRGGBB
-    function rgbToHex(rgb) {
-      const match = rgb.match(/\d+/g); // Ambil angka dari format rgb(r, g, b
-      if (!match || match.length < 3) return null;
-      const hex = match
-        .slice(0, 3) // Ambil hanya 3 angka pertama
-        .map((num) => Number(num).toString(16).padStart(2, "0")) // Konversi ke hexa
-        .join("");
-      return `#${hex}`;
-    }
-
     // Isi Data
     result.forEach((item) => {
       if (item.symbol) {
-        const row = worksheet.addRow({ symbol: item.symbol });
+        const row = worksheet.addRow({ country: item.symbol });
 
         // Pastikan ada cukup nilai untuk tiap timeframe
         const timeframes = ["time_15m", "time_1h", "time_4h", "time_1d", "time_1w", "time_1m", "time_1y"];

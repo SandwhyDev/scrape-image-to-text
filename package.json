@@ -7,16 +7,17 @@
     "push:dev": "dotenv -e .env.development -- npx prisma db push",
     "push:prod": "dotenv -e .env.production -- npx prisma db push",
     "test": "jest --coverage",
-    "dev": "NODE_ENV=development nodemon --exec babel-node src/server.js --watch",
+    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/server.js --watch",
     "clean": "rm -rf dist",
     "build": "npm run clean && babel src -d dist --copy-files",
-    "start": "NODE_ENV=production node dist/server.js"
+    "start": "cross-env NODE_ENV=production node dist/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "exceljs": "^4.4.0",
     "express": "^4.21.2",
