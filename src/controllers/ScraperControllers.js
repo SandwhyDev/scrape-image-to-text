@@ -48,7 +48,8 @@ ScraperControllers.post(`/scrape-create`, async (req, res) => {
         minute: "2-digit",
         second: "2-digit",
       })
-      .replace(/[/:]/g, "-"); // Ganti karakter yang tidak bisa digunakan di nama sheet
+      .replace(",", "")
+      .replace(/[/:]/g, "-");
 
     const worksheet = workbook.addWorksheet(formattedDate);
 
@@ -91,13 +92,13 @@ ScraperControllers.post(`/scrape-create`, async (req, res) => {
     });
 
     // Simpan File Excel
-    const filePath = path.join(__dirname, "../../public/upload/scraped_data.xlsx");
+    const filePath = path.join(__dirname, "../../public/upload/heat-map.xlsx");
     await workbook.xlsx.writeFile(filePath);
 
     res.status(200).json({
       success: true,
       message: "Scraping berhasil, data disimpan ke Excel",
-      filePath: `/upload/scraped_data.xlsx`,
+      filePath: `/upload/heat-map.xlsx`,
       result: result,
     });
   } catch (error) {
